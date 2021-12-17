@@ -1,0 +1,44 @@
+@model Meetup
+@using Microsoft.AspNetCore.Http
+
+<div class="text-center">
+    <h2>Create an Activity</h2>
+    <br>
+    <form action="/meetup/add" method="post">
+        <div class="form-group">
+            <label>Title</label>
+            <input asp-for="title" class="form-control">
+            <span asp-validation-for="title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Time</label>
+            <input type="time" name="MeetupTime">
+        </div>
+        <div class="form-group">
+            <label>Date</label>
+            <input type="date" name="MeetupStart" class="form-control">
+            <span asp-validation-for="MeetupStart" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Duration</label>
+            @* <input asp-for="MinuteHourDay_Value" class="form-control"> *@
+            <input type="number" name="MinuteHourDay_Value" min="0.0" step="1.0" value="0.0"/>
+            <span asp-validation-for="MinuteHourDay_Value" class="text-danger"></span>
+            <select asp-for="MinuteHourDay_Option">
+                <option value="1">Minutes</option>
+                <option value="2">Hours</option>
+                <option value="3">Days</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea asp-for="Description" id="" cols="30" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <input type="hidden" name="UserId" value="@Context.Session.GetInt32("UserId")">
+        <span asp-validation-for="UserId" class="text-danger"></span>
+        <div class="form-group">
+            <input type="submit" value="Create Activity" class="btn btn-primary">
+        </div>
+    </form>
+</div>

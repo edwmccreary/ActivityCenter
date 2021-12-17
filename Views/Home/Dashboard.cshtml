@@ -1,0 +1,52 @@
+@model Meetup
+@using Microsoft.AspNetCore.Http
+
+<div class="text-center">
+    <h1>Welcome to the dashboard</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>Activity</th>
+            <th>Date and Time</th>
+            <th>Duration</th>
+            <th>Event Coordinator</th>
+            <th># of Participants</th>
+            <th>Actions</th>
+        </tr>
+        @{
+            foreach(Meetup m in ViewBag.AllMeetups)
+            {
+                if(m.MeetupStart > DateTime.Now)
+                {
+                    <tr>
+                        <td><a href="/meetup/@m.MeetupId">@m.title</a></td>
+                        <td>@m.MeetupStart.Date.ToShortDateString() at @m.MeetupStart.TimeOfDay</td>
+                        <td>
+                            @m.Duration.ToString()
+                        </td>
+                        <td>@m.user.Username</td>
+                        <td>@m.Guests.Count</td>
+                        <td>
+                            @{
+                                if(Context.Session.GetInt32("UserId") == m.UserId)
+                                {
+                                    <a href="/meetup/delete/@m.MeetupId">DELETE</a>
+                                }
+                                else if(m.Guests.Any(g => g.UserId == Context.Session.GetInt32("UserId")))
+                                {
+                                    <a href="/meetup/leave/@m.MeetupId">Leave</a>
+                                }
+                                else
+                                {
+                                    <a href="/meetup/join/@m.MeetupId">Join</a>
+                                }
+                            }
+                        </td>
+                    </tr>
+
+                }
+            }
+        }
+    </table>
+    <br>
+    <a href="/meetup/new" class="btn btn-primary">Add New Activity</a>
+</div>

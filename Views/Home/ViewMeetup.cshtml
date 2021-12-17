@@ -1,0 +1,39 @@
+@model Meetup
+@using Microsoft.AspNetCore.Http
+
+<div class="text-center">
+    @* <h2>@Model.title</h2> *@
+    <br>
+    <h3>Event Coordinator: @Model.user.Username</h3>
+    <br>
+    <h3>Description:</h3>
+    <p>@Model.Description</p>
+    <br>
+    <h3>Participants</h3>
+    <ul>
+        @{
+            if(Model.Guests.Count == 0)
+            {
+                <li>No Guests Yet</li>
+            }
+            else
+            {
+                foreach(RSVP g in Model.Guests)
+                {
+                    <li>@g.User.Username</li>
+                }
+            }
+        }
+    </ul>
+    <br>
+    @{
+        if(Context.Session.GetInt32("UserId") != Model.UserId)
+        {
+            if(!Model.Guests.Any(g => g.UserId == Context.Session.GetInt32("UserId"))){
+                <a href="/meetup/join/@Model.MeetupId" class="btn btn-primary">Join</a>
+
+            }
+        }
+    }
+    
+</div>
